@@ -1,4 +1,4 @@
-# Määrittelydokumentti (TKT, suomi)
+# Määrittelydokumentti
 
 ## Opinto-ohjelma
 
