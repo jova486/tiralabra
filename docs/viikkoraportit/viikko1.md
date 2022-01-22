@@ -16,9 +16,11 @@ Viikko on kulunut projektin laajuden hahmottelemisessa. Trien rakenne ja toimint
 
 Erityisesti tavoitteet ovat vielä epäselvät. Nyt ovat kasassa (tai ainakin selvillä) keinot tehdä opetusdatasta sekvenssejä markovin ketjujen avulla. Tästä eteenpäin tarvitsen selkeän suunitelman kuinka paljon panostan ulosantiin. Eli kuinka mielekäs musiikillinen tulos on tavoitteena.
 Testauksen toteuttaminen tuntuu vaikealta ennenkaikkea siltä osin että mitä on tarkoitus testata. Trie luokka ja markov_chain luokka ovat selkeästi kohde yksikkötesteille ja varmaan aloitan niistä. Mitä muuta on tarpeen testata yksikkötesteillä?
+Trie ei toimi halutulla tavalla. Siitä ei pysty hakemaan pelkästään lyhyempiä rakenteita vaikka ne onkin tallennettu.
 
 ## Mitä teen seuraavaksi?
 
+Trie vaatii kehittelyä. Siitä ei pysty hakemaan pelkästään lyhyempiä rakenteita vaikka ne onkin tallennettu.
 Jatkan työtä mididatan muokkauksen kanssa ja pohdin miten voin toteuttaa moniäänisen musiikki kappaleen opetusdatasta.
 Myös opetusdataa tarvitaan lisää jotta päästään suurempaan vaihtelevuuteen. Testauksen kehittäminen on varmaankin suurin tehtävä.
 

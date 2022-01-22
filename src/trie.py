@@ -54,10 +54,13 @@ class Trie(object):
             """
             for i in range(0,len(arr)-max_lenght):
                 sub_arr = arr[i:(i+max_lenght)]
+                self.insert(sub_arr)
+                '''
                 for j in range(1,max_lenght+1):
                     sub_sub_arr = sub_arr[0:j]
 
                     self.insert(sub_sub_arr)
+                '''
 
 
 
@@ -68,11 +71,12 @@ class Trie(object):
                 - node: solmu josta haku alkaa
                 - prefix: etsitty
             """
+
             if node.end:
                 self.output.append((prefix+[node.note], node.counter))
 
             for child in node.child_nodes.values():
-                self.dfs(child, prefix+[node.note])
+               self.dfs(child, prefix+[node.note])
 
     def query(self, input):
             """Hakee Triessä olevat sekvenssit
@@ -82,8 +86,8 @@ class Trie(object):
             Returns: taulukko jossa tupleina sekvenssit ja niiden frekvenssi
             """
 
-            self.output = []
             node = self.root
+            self.output = []
 
 
             for n in input:
