@@ -22,7 +22,7 @@ def make_rythm_table(arr):
 def main():
 
     #arr = r.from_midi_To_list("data/midi.mid")
-    temp = r.from_midi_To_list_3("data/midi.mid")
+    temp = r.from_midi_To_list_3("data/midi1.mid")
     h = [[], [], [], []]
     harmonies = make_harmony_table(temp,h)
 
@@ -64,23 +64,24 @@ def main():
 
     tm.insert_array(melody, 3)
 
-    m = mc.doArray(tm,2,50)
+    m = mc.doArray(tm,2,20)
 
 
     rt1 = [[], [], [], []]
     rt1[0] = mc.doArray(trythm1,2,50)
-    rt1[1] = mc.doArray(trythm2,2,35)
-    rt1[2] = mc.doArray(trythm3,2,30)
-    rt1[3] = mc.doArray(trythm4,2,45)
+    rt1[1] = mc.doArray(trythm2,2,200)
+    rt1[2] = mc.doArray(trythm3,2,200)
+    rt1[3] = mc.doArray(trythm4,2,200)
 
 
 
 
     voices = [[], [], [], []]
-
+    max_lenght = 0
     for i in range(0, len(m)):
         for j in range(0, rt1[0][i]):
             voices[0].append(m[i])
+    max_lenght = len(voices[0])
 
 
     out = [rt1[0],m,rt1[1],[],rt1[2],[],rt1[3],[]]
@@ -90,42 +91,53 @@ def main():
     b = mc.getNext(tb, [voices[0][time]])
 
     for i in range(0, len(rt1[3])):
+
         b = mc.getNext(tb, [voices[0][time]])
         if b == []:
-            b=random.choice(harmonies[3])
+            b=[voices[0][time]]-24
         for j in range(0, rt1[3][i]):
             voices[3].append(b)
-        time += rt1[3][i]
+
         out[7].append(b)
+        time += rt1[3][i]
+        if time >= (max_lenght-1):
+            break
+    max_lenght = min(max_lenght,len(voices[3]))
 
     time = 0
 
     for i in range(0, len(rt1[2])):
+
         b = mc.getNext(tt, [voices[0][time],voices[3][time]])
         if b == []:
-            b=random.choice(harmonies[2])
+            b=voices[0][time]-12
         for j in range(0, rt1[2][i]):
             voices[2].append(b)
         time += rt1[2][i]
         out[5].append(b)
+        if time >= (max_lenght-1):
+            break
+
+    max_lenght = min(max_lenght,len(voices[2]))
 
     time = 0
 
 
-    for i in range(0, 20):
+    for i in range(0, len(rt1[1])):
         b = mc.getNext(ta, [voices[0][time],voices[2][time],voices[3][time]])
         if b == []:
-            b=random.choice(harmonies[1])
+            b=voices[3][time]+12
         time += rt1[1][i]
         out[3].append(b)
+        if time >= (max_lenght-1):
+            break
 
-    #print(out)
+
     out2 = [[], [], [], []]
-    for i in range(0,len(out[3])):
-        out2[0].append((out[0][i],out[1][i]))
-        out2[1].append((out[2][i],out[3][i]))
-        out2[2].append((out[4][i],out[5][i]))
-        out2[3].append((out[6][i],out[7][i]))
+    for j in range(0,4):
+        for i in range(0,len(out[j*2+1])):
+            out2[j].append((out[j*2][i],out[j*2+1][i]))
+
 
     r.arr_To_midifile_4("tira4.mid", out2)
 
