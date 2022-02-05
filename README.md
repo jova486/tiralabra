@@ -9,6 +9,7 @@ Tietorakenteet ja Algoritmit harjoitustyö
 
 -   [Määrittelydokumentti](./docs/maarittelydokumentti.md)
 -   [Testikattavuusdokumentti](./docs/testikattavuusdokumentti.md)
+-   [Käyttöohje](./docs/Kayttoohje.md)
 
 ## Viikkoraportit
 
