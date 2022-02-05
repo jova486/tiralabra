@@ -8,6 +8,8 @@ authors = ["Jorma Valjakka <jorma.valjakka@helsinki.fi>"]
 python = "^3.8"
 mido = "^1.2.10"
 MIDIUtil = "^1.2.1"
+PyQt5 = "^5.15.6"
+invoke = "^1.6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

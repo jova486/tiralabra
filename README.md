@@ -14,5 +14,6 @@ Tietorakenteet ja Algoritmit harjoitustyö
 
 -   [Viikko 1](./docs/viikkoraportit/viikko1.md)
 -   [Viikko 2](./docs/viikkoraportit/viikko2.md)
+-   [Viikko 3](./docs/viikkoraportit/viikko3.md)
 
 

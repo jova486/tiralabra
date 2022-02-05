@@ -35,14 +35,14 @@ def getNext(t, s):
 
 def doArray(trie, l, r):
     sq = []
-    for j in range(0,l):
+    for j in range(0, l):
         sq.append(getNext(trie, sq))
     out = []
     for i in range(0, r):
         c = getNext(trie, sq)
 
         if c == []:
-            for j in range(0,(len(sq)+1)):
+            for j in range(0, (len(sq)+1)):
                 c = getNext(trie, sq[:-j])
                 if c != []:
                     break
@@ -50,5 +50,22 @@ def doArray(trie, l, r):
         sq.append(c)
         sq.pop(0)
 
+    return out
+
+
+def doArray_strict(trie, l, r):
+    sq = []
+    out = []
+    for j in range(0, l):
+        sq.append(getNext(trie, sq))
+
+    for i in range(0, r):
+        c = getNext(trie, sq)
+
+        if c == []:
+            return out
+        out.append(c)
+        sq.append(c)
+        sq.pop(0)
 
     return out
