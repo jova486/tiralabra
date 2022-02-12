@@ -15,9 +15,17 @@ poetry run invoke start
 
 ## Päänäkymä
 
-- Sovellus aukeaa päänäkymään jossa voi avata midi filen ja valita tallennettava filen nimen.
-- Testausta varten on midi filejä data kansiossa.
-- Sovellus ei testaa filejen sopivuutta ja kaatuu mikäli jotain muuta avataan.
+![](./kuvat/kayttoliittuma.png)
+
+- Tallennettavan miditiedoston tahtilajin voi valita.
+- Markov syvyys tarkoittaa sitä kuinka pitkiä sekvenssejä tallennetaan triehen ja vastaavasti kuinka pitkä on sekvenssi jonka perusteella haetaan seuraavaa arvoa. Data tallennetaan triehen  syvyys + 1 pitkinä osajonoina.
+- Käytä alkuperäistä rytmiä mahdollistaa valita tehdäänkä rytmi markovin ketjujen avulla vai käyttäänkö rytmi tiedoston rytmi sellaisenaan.
+- Melodiatiedosto on se jonka perusteella tehdään tonaalinen materiaali
+- Rytmitiedosto on rytmin perustana joko sellaisenaan tai markovin ketjujen materiaalina
+
+- kansiossa data on joitan midifilejä joita voi käyttää materiaalina. Kansiossa moniääniset on neliäänisiä koraaleja joita voi kokeilla mutta niiden osalta toiminnot ovat keskeneräisiä.
+
+
 
 ## Testus
 

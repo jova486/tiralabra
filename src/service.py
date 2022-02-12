@@ -26,49 +26,111 @@ class Service:
 
     def __init__(self):
         """Luokan konstruktori.
-        Args:
-            note: tallennettava nuotti, kokonaislukuarvo
+
         """
         self.use_original_rythm = False
+        self.midifile_name_melody = ""
+        self.midifile_name_rythm = ""
         self.out_file = []
         self.num_tracks = 0
+        self.time_signature_numerator = 4
+        self.time_signature_denominator = 2
+        self.markov_depth = 2
 
-    def open_file(self, filename):
-        self.num_tracks = r.get_file_info(filename)
-        if self.num_tracks > 1:
-            self.do_four_track(filename)
+    def set_time_signature(self,text):
+        """Asettaa tahtilajin.
+        Args:
+            text: tahtilaji merkkijonona
+        """
+        text_split = text.split("/")
+        self.time_signature_numerator = int(text_split[0])
+        denominator = int(text_split[1])
+        if denominator == 4:
+            self.time_signature_denominator = 2
+        elif denominator == 8:
+            self.time_signature_denominator = 3
         else:
-            self.do_one_track_melody(filename)
+            self.time_signature_denominator = 4
+
+    def set_markov_depth(self,text):
+        """Asettaa markovin ketjun syvyyden.
+        Args:
+            text: ketjun syvyys merkkijonona
+        """
+
+        self.markov_depth = int(text)
+
+
+    def open_file(self, filename,text):
+        """asettaa tallennettavan midi tiedoston nimen
+        Args:
+            filename: miditiedoston nimi
+            text: melodia tai rytmi
+        """
+        if text == "melody":
+            self.midifile_name_melody = filename
+        else:
+            self.midifile_name_rythm = filename
+
+
 
     def save_midi_file(self, filename):
+        """Tallentaa midi tiedoston
+        Args:
+            filename: tallennettavan tiedoston nimi
+        """
+        if self.midifile_name_melody == "":
+            return
+        self.num_tracks = r.get_file_info(self.midifile_name_melody)
         if self.num_tracks > 1:
-            r.arr_To_midifile_4(filename, self.out_file, 3)
+            self.do_four_track(self.midifile_name_melody,0)
         else:
-            r.arr_To_midifile(filename, self.out_file)
+            self.do_one_track_melody(self.midifile_name_melody,0)
+        if self.num_tracks > 1:
+            r.arr_To_midifile_4(filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
+        else:
+            r.arr_To_midifile(filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
 
-    def do_one_track_melody(self, filename):
+    def do_one_track_melody(self, filename, leght):
+        """Tekee yksiäänisen koosteen tiedoston materiaalista
+        Args:
+            filename: tiedosto jonka materiaalista tehdään markovin ketju
+            leght: ei käytössä vielä
+        """
+
         data = r.from_midi_To_list1(filename)
 
         melody = []
         for i in range(0, len(data)):
             melody.append(data[i][1])
+
+        trie = Trie()
+        trie.insert_array(melody, self.markov_depth+1)
+
+        if self.midifile_name_rythm != "":
+            data=r.from_midi_To_list1(self.midifile_name_rythm)
         rythm = []
         for i in range(0, len(data)):
             rythm.append(data[i][0])
-        trie = Trie()
-        trie.insert_array(melody, 3)
-        melody_out = mc.doArray(trie, 2, len(rythm))
+
+        melody_out = mc.doArray(trie, self.markov_depth, len(rythm))
+
         if self.use_original_rythm == False:
             rythm_trie = Trie()
-            rythm_trie.insert_array(rythm, 3)
-            rythm = mc.doArray(rythm_trie, 2, len(rythm))
+            rythm_trie.insert_array(rythm, self.markov_depth+1)
+            rythm = mc.doArray(rythm_trie, self.markov_depth, len(rythm))
 
         out = []
         for i in range(len(rythm)):
             out.append((rythm[i], melody_out[i]))
         self.out_file = out
 
-    def do_four_track(self, filename):
+    def do_four_track(self, filename,leght):
+        """Tekee neliäänisen koosteen tiedoston materiaalista
+        Args:
+            filename: tiedosto jonka materiaalista tehdään markovin ketju
+            leght: ei käytössä vielä
+        """
         data = r.from_midi_To_list_3(filename)
         trythm1 = Trie()
         trythm2 = Trie()
@@ -111,8 +173,8 @@ class Service:
 
         rythms = [[], [], [], []]
         rythms = make_rythm_table(data, rythms)
-
-        rt1 = [rythms[0], rythms[1], rythms[2], rythms[3]]
+        if self.use_original_rythm == True:
+            rt1 = [rythms[0], rythms[1], rythms[2], rythms[3]]
 
         voices = [[], [], [], []]
         max_lenght = 0

@@ -34,6 +34,12 @@ def getNext(t, s):
 
 
 def doArray(trie, l, r):
+    """Tekee r pitoisen sekvenssin markovin l syvyisen markovin ketjun avulla
+    Args:
+        t: Trie luokka jossa sekvenssit tallennettu
+        l: markovin ketjun syvyys
+        r: sekvenssin pituus
+    """
     sq = []
     for j in range(0, l):
         sq.append(getNext(trie, sq))
@@ -44,7 +50,9 @@ def doArray(trie, l, r):
         if c == []:
             for j in range(0, (len(sq)+1)):
                 c = getNext(trie, sq[:-j])
+
                 if c != []:
+
                     break
         out.append(c)
         sq.append(c)
@@ -54,6 +62,14 @@ def doArray(trie, l, r):
 
 
 def doArray_strict(trie, l, r):
+    """ testejä varten tehty metodi. Eroaa edellisestä siten että pysähtyy mikäli ei pääse
+        eteenpäin halutulla syvyydellä.
+        Tekee r pitoisen sekvenssin markovin l syvyisen markovin ketjun avulla
+    Args:
+        t: Trie luokka jossa sekvenssit tallennettu
+        l: markovin ketjun syvyys
+        r: sekvenssin pituus
+    """
     sq = []
     out = []
     for j in range(0, l):

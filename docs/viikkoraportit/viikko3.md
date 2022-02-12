@@ -9,7 +9,7 @@ Tällä hetkellä voi valita avattavan ja tallennettavan filen sekä valita käy
 
 ### Miten ohjelma on edistynyt?
 
-Käättöliittymä aloitettu. Muuten tällä viikolla on mennyt aika paljon aikaa asioiden uudelleen koodaamiseen.
+Käyttöliittymä aloitettu. Muuten tällä viikolla on mennyt aika paljon aikaa asioiden uudelleen koodaamiseen.
 
 ### Mitä opin tällä viikolla / tänään?
 
