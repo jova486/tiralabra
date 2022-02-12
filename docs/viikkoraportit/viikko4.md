@@ -4,7 +4,7 @@
 ### Mitä olen tehnyt tällä viikolla?
 
 Midifilet teettävät työtä edelleen. Yksiäänisen ja moniäänisen avaamisen ja tallentamisen automatisointi tuotti bugeja joiden korjaamiseen meni aikaa. Dokumentointia on aloitettu ja testi kattavuutta parannettu.
-Kättöliittymään on lisätty mahdollisuus valita tahtilaji ja markovin ketjun haluttu syvyys.
+Käyttöliittymään on lisätty mahdollisuus valita tahtilaji ja markovin ketjun haluttu syvyys. Melodialle ja rytmille voi valita omat tiedostonsa.
 
 ### Miten ohjelma on edistynyt?
 

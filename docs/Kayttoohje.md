@@ -15,7 +15,7 @@ poetry run invoke start
 
 ## Päänäkymä
 
-![](./kuvat/kayttoliittuma.png)
+![](./kuvat/kayttoliittyma.png)
 
 - Tallennettavan miditiedoston tahtilajin voi valita.
 - Markov syvyys tarkoittaa sitä kuinka pitkiä sekvenssejä tallennetaan triehen ja vastaavasti kuinka pitkä on sekvenssi jonka perusteella haetaan seuraavaa arvoa. Data tallennetaan triehen  syvyys + 1 pitkinä osajonoina.
