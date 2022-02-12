@@ -8,7 +8,7 @@ Käyttöliittymään on lisätty mahdollisuus valita tahtilaji ja markovin ketju
 
 ### Miten ohjelma on edistynyt?
 
-Ohjelma ei ole edistynyt tovotulla tavalla paitsi bugikorjausten niin myös epäonnistuneiden kehitysideoiden takia. Ehkä vähän huonosta suunittelusta johtuen en saanut musiikin rakennetta tuottavaa toimintoa aikaiseksi. Se jäänee ensi viikkoon. Qt:n haltuunotto on edistynyt ja uskon että saan sillä tehtyä ihan siistin käyttöliittymän.
+Ohjelma ei ole edistynyt toivotulla tavalla, paitsi bugikorjausten niin myös epäonnistuneiden kehitysideoiden takia. Ehkä vähän huonosta suunittelusta johtuen en saanut musiikin rakennetta tuottavaa toimintoa aikaiseksi. Se jäänee ensi viikkoon. Qt:n haltuunotto on edistynyt ja uskon että saan sillä tehtyä ihan siistin käyttöliittymän.
 
 ### Mitä opin tällä viikolla / tänään?
 
@@ -25,5 +25,5 @@ Kysymyksiä:
 
 Teen jonkinlaisen metodin jolla voi luoda struktuuria ulostuloon. Pyrin kehittämään moniäänisyyden tuottamista.
 
-**Työaika:** noin 8 tuntia
+**Työaika:** noin 9 tuntia
 
