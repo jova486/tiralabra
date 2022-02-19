@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog, QHBoxLayout, QGroupBox, QDialog, QVBoxLayout, QPushButton, QRadioButton
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog, QHBoxLayout,QGridLayout, QGroupBox, QDialog, QVBoxLayout, QPushButton, QRadioButton
 from PyQt5.QtGui import QIcon
 
 from PyQt5.QtCore import pyqtSlot, QRect
@@ -27,6 +27,8 @@ class App(QWidget):
 
         self.createHorizontalLayout()
 
+
+
         file_open_melody = QPushButton('Melodiatiedosto', self)
         file_open_rythm = QPushButton('Rytmitiedosto', self)
         file_open_melody.clicked.connect(self.on_open_melody)
@@ -34,39 +36,49 @@ class App(QWidget):
 
         file_save = QPushButton('Tallenna', self)
         file_save.clicked.connect(self.on_save)
-        windowLayout = QVBoxLayout()
+
 
         self.file_melody_label = QLabel(self)
         self.file_melody_label.setText("Melodia: ")
         self.file_rythm_label = QLabel(self)
         self.file_rythm_label.setText("Rytmi:")
 
-        self.radioButton_use_rythm = QRadioButton('Käytä alkuperäistä rytmiä', self)
+        self.radioButton_use_rythm = QRadioButton(
+            'Käytä alkuperäistä rytmiä', self)
         self.radioButton_use_rythm.toggled.connect(self.on_use_rythm_selected)
 
+        Vbox1 = QVBoxLayout()
+        Vbox2 = QVBoxLayout()
+        Vbox1.addWidget(file_open_melody)
+        Vbox1.addWidget(file_open_rythm)
+        Vbox1.addWidget(file_save)
 
-        windowLayout.addWidget(self.horizontalGroupBox)
+        Vbox2.addWidget(self.file_melody_label)
+        Vbox2.addWidget(self.file_rythm_label)
+        Vbox2.addWidget(self.radioButton_use_rythm)
 
-        windowLayout.addWidget(self.radioButton_use_rythm)
-        windowLayout.addWidget(self.file_melody_label)
-        windowLayout.addWidget(self.file_rythm_label)
-        windowLayout.addWidget(file_open_melody)
-        windowLayout.addWidget(file_open_rythm)
-        windowLayout.addWidget(file_save)
+        windowLayout = 	QGridLayout()
+        windowLayout.addWidget(self.horizontalGroupBox,2,1)
+        horizontalGroupBox2 = QGroupBox()
+        horizontalGroupBox3 = QGroupBox()
+
+        horizontalGroupBox2.setLayout(Vbox1)
+        horizontalGroupBox3.setLayout(Vbox2)
+
+        windowLayout.addWidget(horizontalGroupBox2,1,1)
+        windowLayout.addWidget(horizontalGroupBox3,1,2)
         self.setLayout(windowLayout)
 
         self.show()
 
     def createHorizontalLayout(self):
         self.horizontalGroupBox = QGroupBox()
-        layout = QHBoxLayout()
-
-
+        layout = QVBoxLayout()
 
         self.time_signature_qlabel = QLabel(self)
         self.time_signature_qlabel.setText("Tahtilaji = 4/4")
         self.markov_depth_qlabel = QLabel(self)
-        self.markov_depth_qlabel.setText("markov syvyys = 2")
+        self.markov_depth_qlabel.setText("ketjun aste = 2")
 
         self.time_signature_combo = QComboBox(self)
         self.time_signature_combo.addItem("4/4")
@@ -74,7 +86,8 @@ class App(QWidget):
         self.time_signature_combo.addItem("2/4")
         self.time_signature_combo.addItem("6/8")
         self.time_signature_combo.addItem("5/8")
-        self.time_signature_combo.activated[str].connect(self.on_time_signature_combo_Changed)
+        self.time_signature_combo.activated[str].connect(
+            self.on_time_signature_combo_Changed)
 
         self.markov_depth_combo = QComboBox(self)
         self.markov_depth_combo.addItem("1")
@@ -83,17 +96,17 @@ class App(QWidget):
         self.markov_depth_combo.addItem("4")
         self.markov_depth_combo.setCurrentIndex(1)
 
-        self.markov_depth_combo.activated[str].connect(self.on_markov_depth_combo_Changed)
+        self.markov_depth_combo.activated[str].connect(
+            self.on_markov_depth_combo_Changed)
 
-
-
+        self.reset_trie = QPushButton('Tyhjennä muisti', self)
+        self.reset_trie.clicked.connect(self.on_reset_trie)
 
         layout.addWidget(self.time_signature_combo)
         layout.addWidget(self.time_signature_qlabel)
         layout.addWidget(self.markov_depth_combo)
         layout.addWidget(self.markov_depth_qlabel)
-
-
+        layout.addWidget(self.reset_trie)
 
         self.horizontalGroupBox.setLayout(layout)
 
@@ -114,6 +127,11 @@ class App(QWidget):
         self.time_signature_qlabel.setText("Tahtilaji = "+text)
         service.set_time_signature(text)
         self.time_signature_qlabel.adjustSize()
+    @pyqtSlot()
+    def on_reset_trie(self):
+        service.reset_trie()
+
+
 
     @pyqtSlot()
     def on_markov_depth_combo_Changed(self):
@@ -122,11 +140,10 @@ class App(QWidget):
         service.set_markov_depth(text)
         self.time_signature_qlabel.adjustSize()
 
-
     def on_use_rythm_selected(self):
         service.use_original_rythm = not service.use_original_rythm
 
-    def openFileNameDialog(self,text):
+    def openFileNameDialog(self, text):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(
@@ -137,7 +154,7 @@ class App(QWidget):
             else:
                 self.file_rythm_label.setText("Rytmi:"+fileName)
 
-            service.open_file(fileName,text)
+            service.add_file_name(fileName, text)
 
     def openFileNamesDialog(self):
         options = QFileDialog.Options()

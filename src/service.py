@@ -3,12 +3,22 @@ import midiIO as r
 import markov_chain as mc
 
 
-def make_harmony_table(arr, harmonies):
+def make_harmony_table(arr):
+    """Apumetodi joka rakentaa matriisin harmonioista jokaiselle tahtiosalle
 
+        Args:
+            arr: Taulukko jossa nuotti ja rytmi arvot
+
+        Returns:
+            list: taulukko taulukko johon harmoniat tallennetaan
+        """
+    harmonies = []
     for k in range(0, len(arr)):
+        temp = []
         for j in range(0, len(arr[k])):
             for i in range(0, arr[k][j][0]):
-                harmonies[k].append(arr[k][j][1])
+                temp.append(arr[k][j][1])
+        harmonies.append(temp)
     return harmonies
 
 
@@ -16,7 +26,7 @@ def make_rythm_table(arr, rythms):
 
     for k in range(0, len(arr)):
         for j in range(0, len(arr[k])):
-            rythms[k].append(arr[k][j][0])
+            rythms[k].append(arr[k][j][0]*2)
     return rythms
 
 
@@ -36,8 +46,9 @@ class Service:
         self.time_signature_numerator = 4
         self.time_signature_denominator = 2
         self.markov_depth = 2
+        self.trie = Trie()
 
-    def set_time_signature(self,text):
+    def set_time_signature(self, text):
         """Asettaa tahtilajin.
         Args:
             text: tahtilaji merkkijonona
@@ -52,16 +63,19 @@ class Service:
         else:
             self.time_signature_denominator = 4
 
-    def set_markov_depth(self,text):
-        """Asettaa markovin ketjun syvyyden.
+    def set_markov_depth(self, text):
+        """Asettaa markovin ketjun asteen.
         Args:
-            text: ketjun syvyys merkkijonona
+            text: ketjun aste merkkijonona
         """
 
         self.markov_depth = int(text)
 
+    def reset_trie(self):
+        self.trie = Trie()
 
-    def open_file(self, filename,text):
+
+    def add_file_name(self, filename, text):
         """asettaa tallennettavan midi tiedoston nimen
         Args:
             filename: miditiedoston nimi
@@ -72,8 +86,6 @@ class Service:
         else:
             self.midifile_name_rythm = filename
 
-
-
     def save_midi_file(self, filename):
         """Tallentaa midi tiedoston
         Args:
@@ -83,32 +95,34 @@ class Service:
             return
         self.num_tracks = r.get_file_info(self.midifile_name_melody)
         if self.num_tracks > 1:
-            self.do_four_track(self.midifile_name_melody,0)
+            self.do_four_track(self.midifile_name_melody, 0)
         else:
-            self.do_one_track_melody(self.midifile_name_melody,0)
+            self.do_one_track_melody(self.midifile_name_melody, 0)
         if self.num_tracks > 1:
-            r.arr_To_midifile_4(filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
+            r.arr_To_midifile(
+                filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
         else:
-            r.arr_To_midifile(filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
+            r.arr_To_midifile(
+                filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
 
-    def do_one_track_melody(self, filename, leght):
+    def do_one_track_melody(self, filename, lenght):
         """Tekee yksiäänisen koosteen tiedoston materiaalista
         Args:
             filename: tiedosto jonka materiaalista tehdään markovin ketju
-            leght: ei käytössä vielä
+            lenght: ei käytössä vielä
         """
 
-        data = r.from_midi_To_list1(filename)
+        data = r.from_midi_To_list(filename)[0]
 
         melody = []
         for i in range(0, len(data)):
             melody.append(data[i][1])
 
-        trie = Trie()
+        trie =  self.trie
         trie.insert_array(melody, self.markov_depth+1)
 
         if self.midifile_name_rythm != "":
-            data=r.from_midi_To_list1(self.midifile_name_rythm)
+            data = r.from_midi_To_list(self.midifile_name_rythm)[0]
         rythm = []
         for i in range(0, len(data)):
             rythm.append(data[i][0])
@@ -123,15 +137,15 @@ class Service:
         out = []
         for i in range(len(rythm)):
             out.append((rythm[i], melody_out[i]))
-        self.out_file = out
+        self.out_file = [out]
 
-    def do_four_track(self, filename,leght):
+    def do_four_track(self, filename, lenght):
         """Tekee neliäänisen koosteen tiedoston materiaalista
         Args:
             filename: tiedosto jonka materiaalista tehdään markovin ketju
-            leght: ei käytössä vielä
+            lenght: ei käytössä vielä
         """
-        data = r.from_midi_To_list_3(filename)
+        data = r.from_midi_To_list(filename)
         trythm1 = Trie()
         trythm2 = Trie()
         trythm3 = Trie()
@@ -148,8 +162,8 @@ class Service:
         tm.insert_array(melody, 3)
         m = mc.doArray(tm, 2, len(data[0]))
 
-        h = [[], [], [], []]
-        harmonies = make_harmony_table(data, h)
+
+        harmonies = make_harmony_table(data)
         rythms = [[], [], [], []]
         rythms = make_rythm_table(data, rythms)
 

@@ -7,119 +7,80 @@ def get_file_info(file_name):
     return len(mid.tracks)-1
 
 
-def from_midi_To_list1(s):
-    mid = mido.MidiFile(s, clip=True)
-    notes = []
-    values = []
-    start = 0
+
+def from_midi_To_list(filename):
+    mid = mido.MidiFile(filename, clip=True)
+    data = []
     min_value = 100000
-    if len(mid.tracks)>1:
-        start = 1
 
+    for track in mid.tracks:
 
-    for m in mid.tracks[start][:]:
-
-        m = m.dict()
-
-        if m['type'] == "note_on":
-
-            if m['velocity'] == 0:
-                m['type'] = "note_off"
-
-        if m['type'] == "note_off":
-            note_value = m['time']
-            if note_value != 0:
-                if note_value % 2 != 0:
-                    note_value += 1
-
-                if min_value > note_value:
-                    min_value = note_value
-
-                notes.append(m['note'])
-                values.append(note_value)
-    arr = []
-    for j, i in enumerate(values):
-        i = i//min_value
-        arr.append((i, notes[j]))
-
-    return arr
+        notes = []
+        values = []
+        has_notes = False
+        for m in track:
 
 
 
-
-def from_midi_To_list_3(s):
-
-    mid = mido.MidiFile(s, clip=True)
-    arr = []
-
-    for i in range(1, (len(mid.tracks))):
-
-        temp_arr = []
-
-        for m in mid.tracks[i][:]:
-
-            m = str(m)
-            m = m.split(" ")
-            if m[0] == "note_off":
-
-                temp = []
-
-                for i in range(1, len(m)):
-                    m[i] = int(''.join(filter(str.isdigit, m[i])))
-                temp.append(m[4] // 256)
-                temp.append(m[2])
-                temp_arr.append(temp)
-
-        arr.append(temp_arr)
-
-    return arr
+            m = m.dict()
 
 
-def arr_To_midifile(s, arr, numerator,denominator):
-    track = 0
+            if m['type'] == "note_on":
+
+                if m['velocity'] == 0:
+                    m['type'] = "note_off"
+
+            if m['type'] == "note_off":
+                note_value = m['time']
+                if note_value != 0:
+                    if note_value % 2 != 0:
+                        note_value += 1
+
+                    if min_value > note_value:
+                        min_value = note_value
+                    has_notes = True
+                    notes.append(m['note'])
+                    values.append(note_value)
+        if has_notes == True:
+            arr = []
+            for j, i in enumerate(values):
+                arr.append((i, notes[j]))
+
+
+            data.append(arr)
+    out = []
+    for j in range(len(data)):
+        temp = []
+        for data_value in data[j]:
+
+            temp.append((data_value[0]//min_value, data_value[1]))
+        out.append(temp)
+
+    return out
+
+
+
+def arr_To_midifile(out_file_name, arr, numerator, denominator):
     channel = 0
     time = 0
-    tempo = 120
-    volume = 100
-    MyMIDI = MIDIFile(1)
-    MyMIDI.type = 0
-    MyMIDI.addTimeSignature(track, time, numerator, denominator, 24)
-
-    MyMIDI.addTempo(track, time, tempo)
-
-    for i in arr:
-        notevalue = i[0] / 4
-        for n in range(1, len(i)):
-            MyMIDI.addNote(track, channel, i[n], time, notevalue, volume)
-
-        time = time + notevalue
-
-    with open(s, "wb") as output_file:
-        MyMIDI.writeFile(output_file)
-
-
-def arr_To_midifile_4(s, arr, numerator,denominator):
-    num_tracks = len(arr)
-    track = 0
     channel = 0
-    time = 0
     tempo = 120
     volume = 100
-    MyMIDI = MIDIFile(num_tracks)
-    MyMIDI.addTimeSignature(track, time, numerator, denominator, 24)
+    MyMIDI = MIDIFile(len(arr))
+    MyMIDI.addTimeSignature(0, time, numerator, denominator, 24)
 
-    MyMIDI.addTempo(track, time, tempo)
+    MyMIDI.addTempo(0, time, tempo)
 
-    for j in range(len(arr)):
+    for track_nro,track in enumerate(arr):
         time = 0
-        for i in arr[j]:
+        for note in track:
 
-            notevalue = i[0]/4
+            notevalue = note[0]/4
 
-            MyMIDI.addNote(track, channel, i[1], time, notevalue, volume)
+            MyMIDI.addNote(track_nro, channel, note[1], time, notevalue, volume)
 
             time = time + notevalue
-        track += 1
 
-    with open(s, "wb") as output_file:
+
+    with open(out_file_name, "wb") as output_file:
         MyMIDI.writeFile(output_file)

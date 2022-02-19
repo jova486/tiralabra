@@ -5,14 +5,14 @@ import random
 """
 
 
-def getNext(t, s):
+def getNext(trie, array):
     """Hakee markovin ketjuun seuraavan
     Args:
-        t: Trie luokka jossa sekvenssit tallennettu
-        s: taulukko jossa edeltävät
+        trie: Trie luokka jossa sekvenssit tallennettu
+        arr: taulukko jossa edeltävät
     """
 
-    arr = t.query(s)
+    arr = trie.query(array)
     sum = 0
     for i in arr:
         sum += i[1]
@@ -33,55 +33,55 @@ def getNext(t, s):
     return out
 
 
-def doArray(trie, l, r):
-    """Tekee r pitoisen sekvenssin markovin l syvyisen markovin ketjun avulla
+def doArray(trie, deg, lenght):
+    """Tekee r pitoisen sekvenssin markovin l asteisen markovin ketjun avulla
     Args:
-        t: Trie luokka jossa sekvenssit tallennettu
-        l: markovin ketjun syvyys
-        r: sekvenssin pituus
+        trie: Trie luokka jossa sekvenssit tallennettu
+        deg: markovin ketjun aste
+        lenght: sekvenssin pituus
     """
     sq = []
-    for j in range(0, l):
+    for j in range(0, deg):
         sq.append(getNext(trie, sq))
     out = []
-    for i in range(0, r):
-        c = getNext(trie, sq)
+    for i in range(0, lenght):
+        next = getNext(trie, sq)
 
-        if c == []:
+        if next == []:
             for j in range(0, (len(sq)+1)):
-                c = getNext(trie, sq[:-j])
+                next = getNext(trie, sq[:-j])
 
-                if c != []:
+                if next != []:
 
                     break
-        out.append(c)
-        sq.append(c)
+        out.append(next)
+        sq.append(next)
         sq.pop(0)
 
     return out
 
 
-def doArray_strict(trie, l, r):
+def doArray_strict(trie, deg, lenght):
     """ testejä varten tehty metodi. Eroaa edellisestä siten että pysähtyy mikäli ei pääse
         eteenpäin halutulla syvyydellä.
         Tekee r pitoisen sekvenssin markovin l syvyisen markovin ketjun avulla
     Args:
-        t: Trie luokka jossa sekvenssit tallennettu
-        l: markovin ketjun syvyys
-        r: sekvenssin pituus
+        trie: Trie luokka jossa sekvenssit tallennettu
+        deg: markovin ketjun aste
+        lenght: sekvenssin pituus
     """
     sq = []
     out = []
-    for j in range(0, l):
+    for j in range(0, deg):
         sq.append(getNext(trie, sq))
 
-    for i in range(0, r):
-        c = getNext(trie, sq)
+    for _ in range(0, lenght):
+        next = getNext(trie, sq)
 
-        if c == []:
+        if next == []:
             return out
-        out.append(c)
-        sq.append(c)
+        out.append(next)
+        sq.append(next)
         sq.pop(0)
 
     return out
