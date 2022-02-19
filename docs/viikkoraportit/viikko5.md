@@ -3,7 +3,7 @@
 
 ### Mitä olen tehnyt tällä viikolla?
 
-Midifilejen avaaminen ja tallentaminen toimii nyt melko hallitusti ja yksi yksikkötesti vahvistaa että tietynlaisilla fileillä avaaminen ja tallentaminen toimii oikein
+Midifilejen avaaminen ja tallentaminen toimii nyt melko hallitusti ja yksi yksikkötesti vahvistaa että tietynlaisilla fileillä avaaminen ja tallentaminen toimii oikein. Testikattavuus on ihan hyvällä mallilla.
 
 ### Miten ohjelma on edistynyt?
 
@@ -11,7 +11,7 @@ Ohjelmaan on tullut jotain lisäominaisuuksia. Nyt uuden filen lisääminen ei p
 
 ### Mitä opin tällä viikolla / tänään?
 
-Fokus on ollut koodin parantamisessa. Muuttujien nimien ei tarvitse olla pitkiä ollakseen kuvaavia.
+Fokus on ollut refaktoroinnissa. Dokumentoiva koodi on alkanut selkeytyä. Monilta osin koodin laatu on parantunut esim. midi IO luokka on nyt huomattavasti selkeämpi.
 
 ### Mikä jäi epäselväksi tai tuottanut vaikeuksia? Vastaa tähän kohtaan rehellisesti, koska saat tarvittaessa apua tämän kohdan perusteella.
 
@@ -20,7 +20,7 @@ Nyt ei varsinaisesti ole epäselviä asioita. Seuraavaksi pitää testata ohjelm
 ### Mitä teen seuraavaksi?
 
 Ominaisuuksista lisään taulukon jossa näkyvät trieen tallennetut tiedostot. Myös logiikka niiden käyttämiseen pitää miettiä uudelleen.
-Dokumentoinia, refoaktorointia, testausdokumenttia ja sopivia syötteitä. Pylin tuloksen parantelua.
+Dokumentoinia, refaktorointia, testausdokumenttia ja sopivia syötteitä. Pylin tuloksen parantelua.
 
 **Työaika:** noin 5 tuntia
 
