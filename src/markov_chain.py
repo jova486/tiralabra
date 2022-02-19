@@ -40,26 +40,41 @@ def doArray(trie, deg, lenght):
         deg: markovin ketjun aste
         lenght: sekvenssin pituus
     """
+
     sq = []
-    for j in range(0, deg):
-        sq.append(getNext(trie, sq))
     out = []
+    while lenght > 0:
+        next = getNext(trie, sq)
+        if next != []:
+            if len(sq)<deg:
+                sq.append(next)
+            else:
+                out.append(next)
+                sq.append(next)
+                sq.pop(0)
+                lenght -=1
+        else:
+            sq = []
+    return out
+
+    '''
+
+
     for i in range(0, lenght):
         next = getNext(trie, sq)
 
         if next == []:
             for j in range(0, (len(sq)+1)):
                 next = getNext(trie, sq[:-j])
-
                 if next != []:
-
+                    sq = doStart(trie, deg)
                     break
         out.append(next)
         sq.append(next)
         sq.pop(0)
 
     return out
-
+'''
 
 def doArray_strict(trie, deg, lenght):
     """ testejä varten tehty metodi. Eroaa edellisestä siten että pysähtyy mikäli ei pääse
