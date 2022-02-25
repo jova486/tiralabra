@@ -40,6 +40,7 @@ class Service:
         """
         self.use_original_rythm = False
         self.midifile_name_melody = ""
+        self.midifile_name_melody_array = []
         self.midifile_name_rythm = ""
         self.out_file = []
         self.num_tracks = 0
@@ -70,10 +71,28 @@ class Service:
         """
 
         self.markov_depth = int(text)
+        self.trie = Trie()
+        for file in self.midifile_name_melody_array:
+            self.add_to_trie(file)
 
     def reset_trie(self):
-        self.trie = Trie()
 
+        self.midifile_name_melody_array = []
+        self.midifile_name_melody_array.append(self.midifile_name_melody)
+        self.trie = Trie()
+        for file in self.midifile_name_melody_array:
+            self.add_to_trie(file)
+
+    def add_to_trie(self,filename):
+
+        data = r.from_midi_To_list(filename)[0]
+
+        melody = []
+        for i in range(0, len(data)):
+            melody.append(data[i][1])
+
+        trie =  self.trie
+        trie.insert_array(melody, self.markov_depth+1)
 
     def add_file_name(self, filename, text):
         """asettaa tallennettavan midi tiedoston nimen
@@ -83,6 +102,8 @@ class Service:
         """
         if text == "melody":
             self.midifile_name_melody = filename
+            self.midifile_name_melody_array.append(filename)
+            self.add_to_trie(filename)
         else:
             self.midifile_name_rythm = filename
 
@@ -114,20 +135,13 @@ class Service:
 
         data = r.from_midi_To_list(filename)[0]
 
-        melody = []
-        for i in range(0, len(data)):
-            melody.append(data[i][1])
-
-        trie =  self.trie
-        trie.insert_array(melody, self.markov_depth+1)
-
         if self.midifile_name_rythm != "":
             data = r.from_midi_To_list(self.midifile_name_rythm)[0]
         rythm = []
         for i in range(0, len(data)):
             rythm.append(data[i][0])
 
-        melody_out = mc.doArray(trie, self.markov_depth, len(rythm))
+        melody_out = mc.doArray(self.trie, self.markov_depth, len(rythm))
 
         if self.use_original_rythm == False:
             rythm_trie = Trie()

@@ -17,11 +17,20 @@ poetry run invoke start
 
 ![](./kuvat/kayttoliittyma.png)
 
-- Tallennettavan miditiedoston tahtilajin voi valita.
-- Markov syvyys tarkoittaa sitä kuinka pitkiä sekvenssejä tallennetaan triehen ja vastaavasti kuinka pitkä on sekvenssi jonka perusteella haetaan seuraavaa arvoa. Data tallennetaan triehen  syvyys + 1 pitkinä osajonoina.
+ylä vasen:
+- Melodiatiedosto on se jonka perusteella tehdään tonaalinen materiaali. Näitä voidaan lisätä useampia.
+- Rytmitiedosto on rytmin perustana joko sellaisenaan tai markovin ketjujen materiaalina.
+- Tallenna tallentaa miditeidoston voimassa olevilla asetuksilla.
+
+ylä oikea:
+- Melodia = viimeeksi valittu melodiatiedosto.
+- Rytmi = rytmin muodostamiseen valittu tiedosto.
 - Käytä alkuperäistä rytmiä mahdollistaa valita tehdäänkä rytmi markovin ketjujen avulla vai käyttäänkö rytmi tiedoston rytmi sellaisenaan.
-- Melodiatiedosto on se jonka perusteella tehdään tonaalinen materiaali
-- Rytmitiedosto on rytmin perustana joko sellaisenaan tai markovin ketjujen materiaalina
+
+ala vasen:
+
+- ketjun aste tarkoittaa sitä kuinka pitkiä sekvenssejä tallennetaan triehen ja vastaavasti kuinka pitkä on sekvenssi jonka perusteella haetaan seuraavaa arvoa. Data tallennetaan triehen  syvyys + 1 pitkinä osajonoina.
+
 
 - kansiossa data on joitan midifilejä joita voi käyttää materiaalina. Kansiossa moniääniset on neliäänisiä koraaleja joita voi kokeilla mutta niiden osalta toiminnot ovat keskeneräisiä.
 

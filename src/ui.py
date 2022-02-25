@@ -1,11 +1,10 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog, QHBoxLayout,QGridLayout, QGroupBox, QDialog, QVBoxLayout, QPushButton, QRadioButton
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog, QHBoxLayout,QGridLayout, QGroupBox, QDialog, QVBoxLayout, QPushButton, QRadioButton,QListWidget
 from PyQt5.QtGui import QIcon
 
 from PyQt5.QtCore import pyqtSlot, QRect
 
 from service import service
-
 
 class App(QWidget):
 
@@ -47,18 +46,27 @@ class App(QWidget):
             'Käytä alkuperäistä rytmiä', self)
         self.radioButton_use_rythm.toggled.connect(self.on_use_rythm_selected)
 
+
+
+
         Vbox1 = QVBoxLayout()
         Vbox2 = QVBoxLayout()
         Vbox1.addWidget(file_open_melody)
         Vbox1.addWidget(file_open_rythm)
         Vbox1.addWidget(file_save)
 
+
+
         Vbox2.addWidget(self.file_melody_label)
         Vbox2.addWidget(self.file_rythm_label)
         Vbox2.addWidget(self.radioButton_use_rythm)
 
+        self.listWidged = QListWidget()
+
+
         windowLayout = 	QGridLayout()
         windowLayout.addWidget(self.horizontalGroupBox,2,1)
+        windowLayout.addWidget(self.listWidged,2,2)
         horizontalGroupBox2 = QGroupBox()
         horizontalGroupBox3 = QGroupBox()
 
@@ -114,8 +122,17 @@ class App(QWidget):
     def on_open_melody(self):
         self.openFileNameDialog("melody")
 
+    @pyqtSlot()
     def on_open_rythm(self):
         self.openFileNameDialog("rythm")
+
+
+    def on_show_filelist(self):
+        self.listWidged.clear()
+        for file in service.midifile_name_melody_array:
+            self.listWidged.addItem(file)
+
+
 
     @pyqtSlot()
     def on_save(self):
@@ -130,6 +147,7 @@ class App(QWidget):
     @pyqtSlot()
     def on_reset_trie(self):
         service.reset_trie()
+        self.on_show_filelist()
 
 
 
@@ -139,6 +157,7 @@ class App(QWidget):
         self.markov_depth_qlabel.setText("markov syvyys = "+text)
         service.set_markov_depth(text)
         self.time_signature_qlabel.adjustSize()
+
 
     def on_use_rythm_selected(self):
         service.use_original_rythm = not service.use_original_rythm
@@ -151,11 +170,12 @@ class App(QWidget):
         if fileName:
             if text == "melody":
                 self.file_melody_label.setText("Melodia: "+fileName)
+
             else:
                 self.file_rythm_label.setText("Rytmi:"+fileName)
 
             service.add_file_name(fileName, text)
-
+        self.on_show_filelist()
     def openFileNamesDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog

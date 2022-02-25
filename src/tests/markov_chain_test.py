@@ -87,7 +87,7 @@ class Test_markov_chain(unittest.TestCase):
         self.assertAlmostEqual(len(doArray(self.trie2, test_lenght, 100)), 100)
 
     def test_do_array_strict_all_can_be_found(self):
-        """
+        """Kaikki sekvenssit löytyvät alkuperäisestä sekvenssistä
         """
         arr = [1, 5, 3, 2, 6, 7, 8, 3, 2, 1, 5, 4,
                6, 5, 3, 4, 2, 5, 4, 6, 7, 6, 1, 3, 2, 4]

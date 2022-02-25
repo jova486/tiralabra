@@ -57,24 +57,7 @@ def doArray(trie, deg, lenght):
             sq = []
     return out
 
-    '''
 
-
-    for i in range(0, lenght):
-        next = getNext(trie, sq)
-
-        if next == []:
-            for j in range(0, (len(sq)+1)):
-                next = getNext(trie, sq[:-j])
-                if next != []:
-                    sq = doStart(trie, deg)
-                    break
-        out.append(next)
-        sq.append(next)
-        sq.pop(0)
-
-    return out
-'''
 
 def doArray_strict(trie, deg, lenght):
     """ testejä varten tehty metodi. Eroaa edellisestä siten että pysähtyy mikäli ei pääse
