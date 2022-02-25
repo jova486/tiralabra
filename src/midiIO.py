@@ -3,12 +3,24 @@ import mido
 
 
 def get_file_info(file_name):
+    """Midifilen trackien lukumäärä
+    Args:
+        file_name: midifilen nimi
+
+    """
     mid = mido.MidiFile(file_name, clip=True)
     return len(mid.tracks)-1
 
 
 
 def from_midi_To_list(filename):
+    """Avaa midifilen ja muuttaa sen sisällön ohjelman ymmärtämään muotoon
+    Args:
+        file_name: avattavan midifilen nimi
+    Returns:
+        lista nuotti-rytmi pareista
+
+    """
     mid = mido.MidiFile(filename, clip=True)
     data = []
     min_value = 100000
@@ -18,20 +30,15 @@ def from_midi_To_list(filename):
         notes = []
         values = []
         has_notes = False
-        for m in track:
+        for midimessage in track:
+            message = midimessage.dict()
+            if message['type'] == "note_on":
 
+                if message['velocity'] == 0:
+                    message['type'] = "note_off"
 
-
-            m = m.dict()
-
-
-            if m['type'] == "note_on":
-
-                if m['velocity'] == 0:
-                    m['type'] = "note_off"
-
-            if m['type'] == "note_off":
-                note_value = m['time']
+            if message['type'] == "note_off":
+                note_value = message['time']
                 if note_value != 0:
                     if note_value % 2 != 0:
                         note_value += 1
@@ -39,7 +46,7 @@ def from_midi_To_list(filename):
                     if min_value > note_value:
                         min_value = note_value
                     has_notes = True
-                    notes.append(m['note'])
+                    notes.append(message['note'])
                     values.append(note_value)
         if has_notes == True:
             arr = []
@@ -61,6 +68,14 @@ def from_midi_To_list(filename):
 
 
 def arr_To_midifile(out_file_name, arr, numerator, denominator):
+    """Datalistan muuttaminen midifileksi ja tallentaminen
+    Args:
+        out_file_name: tallennettavan midifilen nimi
+        arr: datalista
+        numerator: midifilen tahtilajin tahtiosoitin
+        denominator: midifilen tahtilajin nuottiarvo
+
+    """
     channel = 0
     time = 0
     channel = 0

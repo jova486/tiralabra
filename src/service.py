@@ -23,6 +23,14 @@ def make_harmony_table(arr):
 
 
 def make_rythm_table(arr, rythms):
+    """Apumetodi joka rakentaa matriisin rymeistä
+
+        Args:
+            arr: Taulukko jossa rytmi arvot
+
+        Returns:
+            list: taulukko taulukko johon rytmit tallennetaan
+        """
 
     for k in range(0, len(arr)):
         for j in range(0, len(arr[k])):
@@ -76,6 +84,9 @@ class Service:
             self.add_to_trie(file)
 
     def reset_trie(self):
+        """Alustaa trien uudelleen
+
+        """
 
         self.midifile_name_melody_array = []
         self.midifile_name_melody_array.append(self.midifile_name_melody)
@@ -84,6 +95,11 @@ class Service:
             self.add_to_trie(file)
 
     def add_to_trie(self,filename):
+        """Lisää tiedoston sisällön trieeen
+        Args:
+            filename: ketjun lisättävän tiedoston nimi
+
+        """
 
         data = r.from_midi_To_list(filename)[0]
 
