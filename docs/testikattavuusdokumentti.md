@@ -21,6 +21,7 @@ Sovellusta on testtattu erityisesti laadullista vertailua varten tehdyllä testi
 ![](./kuvat/1-aste.png)
 
 Ensimmäisen asteen ketjulla toteutettu melodia
+
 ![](./kuvat/4-aste1.png)
 
 Neljännen asteen ketjulla toteutettu melodia
