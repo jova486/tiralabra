@@ -151,6 +151,7 @@ class Service:
 
         data = r.from_midi_To_list(filename)[0]
 
+
         if self.midifile_name_rythm != "":
             data = r.from_midi_To_list(self.midifile_name_rythm)[0]
         rythm = []
@@ -176,6 +177,7 @@ class Service:
             lenght: ei käytössä vielä
         """
         data = r.from_midi_To_list(filename)
+
         trythm1 = Trie()
         trythm2 = Trie()
         trythm3 = Trie()

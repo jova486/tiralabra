@@ -21,7 +21,9 @@ def from_midi_To_list(filename):
         lista nuotti-rytmi pareista
 
     """
+
     mid = mido.MidiFile(filename, clip=True)
+
     data = []
     min_value = 100000
 

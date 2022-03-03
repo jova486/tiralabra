@@ -1,8 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog, QHBoxLayout,QGridLayout, QGroupBox, QDialog, QVBoxLayout, QPushButton, QRadioButton,QListWidget
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog,QGridLayout, QGroupBox, QVBoxLayout, QPushButton, QCheckBox,QListWidget
 
-from PyQt5.QtCore import pyqtSlot, QRect
+
+from PyQt5.QtCore import pyqtSlot
 
 from service import service
 
@@ -42,7 +42,7 @@ class App(QWidget):
         self.file_rythm_label = QLabel(self)
         self.file_rythm_label.setText("Rytmi:")
 
-        self.radioButton_use_rythm = QRadioButton(
+        self.radioButton_use_rythm = QCheckBox(
             'Käytä alkuperäistä rytmiä', self)
         self.radioButton_use_rythm.toggled.connect(self.on_use_rythm_selected)
 
@@ -166,7 +166,7 @@ class App(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(
-            self, "QFileDialog.getOpenFileName()"+text, "", "All Files (*);;midifiles (*.mid)", options=options)
+            self, "Avaa midi file "+text, "", "midifiles (*.mid)", options=options)
         if fileName:
             if text == "melody":
                 self.file_melody_label.setText("Melodia: "+fileName)
@@ -176,19 +176,13 @@ class App(QWidget):
 
             service.add_file_name(fileName, text)
         self.on_show_filelist()
-    def openFileNamesDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(
-            self, "QFileDialog.getOpenFileNames()", "", "All Files (*);;midifiles (*.mid)", options=options)
-        if files:
-            print(files)
+
 
     def saveFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getSaveFileName(
-            self, "QFileDialog.getSaveFileName()", "", "All Files (*);;midifiles (*.mid)", options=options)
+            self, "Tallenna midi tiedosto", "", "midifiles (*.mid)", options=options)
         if fileName:
             service.save_midi_file(fileName)
 

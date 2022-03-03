@@ -33,7 +33,7 @@ def getNext(trie, array):
     return out
 
 
-def doArray(trie, deg, lenght):
+def doArray(trie, deg, length):
     """Tekee r pitoisen sekvenssin markovin l asteisen markovin ketjun avulla
     Args:
         trie: Trie luokka jossa sekvenssit tallennettu
@@ -43,7 +43,7 @@ def doArray(trie, deg, lenght):
 
     sq = []
     out = []
-    while lenght > 0:
+    while length > 0:
         next = getNext(trie, sq)
         if next != []:
             if len(sq)<deg:
@@ -52,14 +52,14 @@ def doArray(trie, deg, lenght):
                 out.append(next)
                 sq.append(next)
                 sq.pop(0)
-                lenght -=1
+                length -=1
         else:
             sq = []
     return out
 
 
 
-def doArray_strict(trie, deg, lenght):
+def doArray_strict(trie, deg, length):
     """ testejä varten tehty metodi. Eroaa edellisestä siten että pysähtyy mikäli ei pääse
         eteenpäin halutulla syvyydellä.
         Tekee r pitoisen sekvenssin markovin l syvyisen markovin ketjun avulla
@@ -73,7 +73,7 @@ def doArray_strict(trie, deg, lenght):
     for j in range(0, deg):
         sq.append(getNext(trie, sq))
 
-    for _ in range(0, lenght):
+    for _ in range(0, length):
         next = getNext(trie, sq)
 
         if next == []:
