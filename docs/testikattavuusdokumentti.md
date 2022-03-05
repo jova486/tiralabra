@@ -38,7 +38,7 @@ Edeltävät näytteet on toteutettu samalla rytmisekvenssillä. Onkin helppo huo
 
 Rytmi on synkopoitunut luonnottoman pitkään.
 
-Musiikillisesti mielenkiintoisempaa lopputulosta haettaessa voi satunnaisuutta vähentää käyttämällä valmista rytmiä. Melodiamateriaalin osalta markovin ketjuilla voi generoida loputtomasti variaatioita joiden osalta tosin musiikillinen mielekkyys jää kuulian arvioitavaksi.
+Musiikillisesti mielenkiintoisempaa lopputulosta haettaessa voi satunnaisuutta vähentää käyttämällä valmista rytmiä. Melodiamateriaalin osalta markovin ketjuilla voi generoida loputtomasti variaatioita joiden osalta tosin musiikillinen mielekkyys jää kuulijan arvioitavaksi.
 
 ![](./kuvat/esimerkki.png)
 
