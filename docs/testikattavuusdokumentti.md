@@ -33,9 +33,13 @@ Mielenkiintoista on huomata että neljännekin asteen kejulla ja näinkin pienel
 Toinen neljännen asteen ketjulla toteutettu melodia
 
 Edeltävät näytteet on toteutettu samalla rytmisekvenssillä. Onkin helppo huomata että rytmin osalta matkovin ketjut toimivat selvästi heikommin kuin melodian osalta. Tämä on seurausta nuottiarvojen pienemmästä varianssista. Erittäin tyypillistä on että yksi rytmiarvo sekoittaa iskualojen lunnollisen painotuksen ja syntyy pitkä synkooppiketju joka on musiikissa yleisesti ottaen melko harvinainen. Mikäli melodioita haluaisi tehdä tällä menetelmällä pitäisi jollain muulla tavoin huolehtia että rytminen variaatio ei aiheutaa luonnottonta iskutusta.
+
 ![](./kuvat/4-aste-free-rythm.png)
 
 Rytmi on synkopoitunut luonnottoman pitkään.
 
+Musiikillisesti mielenkiintoisempaa lopputulosta haettaessa voi satunnaisuutta vähentää käyttämällä valmista rytmiä. Melodiamateriaalin osalta markovin ketjuilla voi generoida loputtomasti variaatioita joiden osalta tosin musiikillinen mielekkyys jää kuulian arvioitavaksi.
+
+![](./kuvat/esimerkki.png)
 
 
