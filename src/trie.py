@@ -5,8 +5,6 @@ Created on Fri Jan 14 18:26:35 2022
 
 @author: jovajova
 """
-import random
-
 
 class TrieNode:
     """Trie rakenteen solmua kuvaava luokka
@@ -47,14 +45,14 @@ class Trie():
             arr: tallennettava sekvenssi
         """
         node = self.root
-        for n in arr:
-            if n in node.child_nodes:
-                node = node.child_nodes[n]
+        for note in arr:
+            if note in node.child_nodes:
+                node = node.child_nodes[note]
 
             else:
 
-                new_node = TrieNode(n)
-                node.child_nodes[n] = new_node
+                new_node = TrieNode(note)
+                node.child_nodes[note] = new_node
                 node = new_node
 
         node.end = True
@@ -67,10 +65,10 @@ class Trie():
             arr: tallennettava sekvenssi
             max_lenght: tallennettavien osien maksimipituus
         """
-        for j in range(1, max_lenght+1):
-            for i in range(0, len(arr)-j+1):
+        for j in range(1, max_lenght + 1):
+            for i in range(0, len(arr) - j + 1):
 
-                sub_arr = arr[i:(i+j)]
+                sub_arr = arr[i:(i + j)]
                 self.insert(sub_arr)
 
     def dfs(self, node, prefix, lenght):
@@ -83,9 +81,9 @@ class Trie():
         """
 
         if node.end:
-            out = prefix+[node.note]
+            out = prefix + [node.note]
             if len(out) == lenght:
-                self.output.append((prefix+[node.note], node.counter))
+                self.output.append((prefix + [node.note], node.counter))
 
         if len(prefix) < lenght:
             for child in node.child_nodes.values():
@@ -93,7 +91,7 @@ class Trie():
                 if node.note == -1:
                     self.dfs(child, prefix, lenght)
                 else:
-                    self.dfs(child, prefix+[node.note], lenght)
+                    self.dfs(child, prefix + [node.note], lenght)
 
     def query(self, input):
         """Hakee Triessä olevat sekvenssit
@@ -116,6 +114,6 @@ class Trie():
 
                 return []
 
-        self.dfs(node, input[:-1], (len(input)+1))
+        self.dfs(node, input[:-1], (len(input) + 1))
 
         return self.output

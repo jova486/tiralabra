@@ -1,16 +1,22 @@
+"""
+Created on Fri Jan 14 18:26:35 2022
+
+@author: jovajova
+"""
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog,QGridLayout, QGroupBox, QVBoxLayout, QPushButton, QCheckBox,QListWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QComboBox, QFileDialog, QGridLayout, QGroupBox, QVBoxLayout, QPushButton, QCheckBox, QListWidget
 
 
 from PyQt5.QtCore import pyqtSlot
 
 from service import service
 
+
 class App(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.title = 'Dadakone'
+        self.title = 'Melodymaker'
         self.left = 10
         self.top = 10
         self.width = 600
@@ -26,8 +32,6 @@ class App(QWidget):
 
         self.createHorizontalLayout()
 
-
-
         file_open_melody = QPushButton('Melodiatiedosto', self)
         file_open_rythm = QPushButton('Rytmitiedosto', self)
         file_open_melody.clicked.connect(self.on_open_melody)
@@ -35,7 +39,6 @@ class App(QWidget):
 
         file_save = QPushButton('Tallenna', self)
         file_save.clicked.connect(self.on_save)
-
 
         self.file_melody_label = QLabel(self)
         self.file_melody_label.setText("Melodia: ")
@@ -46,16 +49,11 @@ class App(QWidget):
             'Käytä alkuperäistä rytmiä', self)
         self.radioButton_use_rythm.toggled.connect(self.on_use_rythm_selected)
 
-
-
-
         Vbox1 = QVBoxLayout()
         Vbox2 = QVBoxLayout()
         Vbox1.addWidget(file_open_melody)
         Vbox1.addWidget(file_open_rythm)
         Vbox1.addWidget(file_save)
-
-
 
         Vbox2.addWidget(self.file_melody_label)
         Vbox2.addWidget(self.file_rythm_label)
@@ -63,18 +61,17 @@ class App(QWidget):
 
         self.listWidged = QListWidget()
 
-
-        windowLayout = 	QGridLayout()
-        windowLayout.addWidget(self.horizontalGroupBox,2,1)
-        windowLayout.addWidget(self.listWidged,2,2)
+        windowLayout = QGridLayout()
+        windowLayout.addWidget(self.horizontalGroupBox, 2, 1)
+        windowLayout.addWidget(self.listWidged, 2, 2)
         horizontalGroupBox2 = QGroupBox()
         horizontalGroupBox3 = QGroupBox()
 
         horizontalGroupBox2.setLayout(Vbox1)
         horizontalGroupBox3.setLayout(Vbox2)
 
-        windowLayout.addWidget(horizontalGroupBox2,1,1)
-        windowLayout.addWidget(horizontalGroupBox3,1,2)
+        windowLayout.addWidget(horizontalGroupBox2, 1, 1)
+        windowLayout.addWidget(horizontalGroupBox3, 1, 2)
         self.setLayout(windowLayout)
 
         self.show()
@@ -126,13 +123,10 @@ class App(QWidget):
     def on_open_rythm(self):
         self.openFileNameDialog("rythm")
 
-
     def on_show_filelist(self):
         self.listWidged.clear()
         for file in service.midifile_name_melody_array:
             self.listWidged.addItem(file)
-
-
 
     @pyqtSlot()
     def on_save(self):
@@ -141,23 +135,21 @@ class App(QWidget):
     @pyqtSlot()
     def on_time_signature_combo_Changed(self):
         text = self.time_signature_combo.currentText()
-        self.time_signature_qlabel.setText("Tahtilaji = "+text)
+        self.time_signature_qlabel.setText("Tahtilaji = " + text)
         service.set_time_signature(text)
         self.time_signature_qlabel.adjustSize()
+
     @pyqtSlot()
     def on_reset_trie(self):
         service.reset_trie()
         self.on_show_filelist()
 
-
-
     @pyqtSlot()
     def on_markov_depth_combo_Changed(self):
         text = self.markov_depth_combo.currentText()
-        self.markov_depth_qlabel.setText("markov syvyys = "+text)
+        self.markov_depth_qlabel.setText("markov syvyys = " + text)
         service.set_markov_depth(text)
         self.time_signature_qlabel.adjustSize()
-
 
     def on_use_rythm_selected(self):
         service.use_original_rythm = not service.use_original_rythm
@@ -166,17 +158,16 @@ class App(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(
-            self, "Avaa midi file "+text, "", "midifiles (*.mid)", options=options)
+            self, "Avaa midi file " + text, "", "midifiles (*.mid)", options=options)
         if fileName:
             if text == "melody":
-                self.file_melody_label.setText("Melodia: "+fileName)
+                self.file_melody_label.setText("Melodia: " + fileName)
 
             else:
-                self.file_rythm_label.setText("Rytmi:"+fileName)
+                self.file_rythm_label.setText("Rytmi:" + fileName)
 
             service.add_file_name(fileName, text)
         self.on_show_filelist()
-
 
     def saveFileDialog(self):
         options = QFileDialog.Options()

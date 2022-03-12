@@ -1,3 +1,8 @@
+"""
+Created on Fri Jan 14 18:26:35 2022
+
+@author: jovajova
+"""
 from midiutil import MIDIFile
 import mido
 
@@ -9,11 +14,10 @@ def get_file_info(file_name):
 
     """
     mid = mido.MidiFile(file_name, clip=True)
-    return len(mid.tracks)-1
+    return len(mid.tracks) - 1
 
 
-
-def from_midi_To_list(filename):
+def from_midi_to_list(filename):
     """Avaa midifilen ja muuttaa sen sisällön ohjelman ymmärtämään muotoon
     Args:
         file_name: avattavan midifilen nimi
@@ -44,17 +48,14 @@ def from_midi_To_list(filename):
                 if note_value != 0:
                     if note_value % 2 != 0:
                         note_value += 1
-
-                    if min_value > note_value:
-                        min_value = note_value
+                    min_value = min(min_value, note_value)
                     has_notes = True
                     notes.append(message['note'])
                     values.append(note_value)
-        if has_notes == True:
+        if has_notes:
             arr = []
             for j, i in enumerate(values):
                 arr.append((i, notes[j]))
-
 
             data.append(arr)
     out = []
@@ -62,14 +63,13 @@ def from_midi_To_list(filename):
         temp = []
         for data_value in data[j]:
 
-            temp.append((data_value[0]//min_value, data_value[1]))
+            temp.append((data_value[0] // min_value, data_value[1]))
         out.append(temp)
 
     return out
 
 
-
-def arr_To_midifile(out_file_name, arr, numerator, denominator):
+def arr_to_midifile(out_file_name, arr, numerator, denominator):
     """Datalistan muuttaminen midifileksi ja tallentaminen
     Args:
         out_file_name: tallennettavan midifilen nimi
@@ -83,21 +83,26 @@ def arr_To_midifile(out_file_name, arr, numerator, denominator):
     channel = 0
     tempo = 120
     volume = 100
-    MyMIDI = MIDIFile(len(arr))
-    MyMIDI.addTimeSignature(0, time, numerator, denominator, 24)
+    midi_file = MIDIFile(len(arr))
+    midi_file.addTimeSignature(0, time, numerator, denominator, 24)
 
-    MyMIDI.addTempo(0, time, tempo)
+    midi_file.addTempo(0, time, tempo)
 
-    for track_nro,track in enumerate(arr):
+    for track_nro, track in enumerate(arr):
         time = 0
         for note in track:
 
-            notevalue = note[0]/4
+            notevalue = note[0] / 4
 
-            MyMIDI.addNote(track_nro, channel, note[1], time, notevalue, volume)
+            midi_file.addNote(
+                track_nro,
+                channel,
+                note[1],
+                time,
+                notevalue,
+                volume)
 
             time = time + notevalue
 
-
     with open(out_file_name, "wb") as output_file:
-        MyMIDI.writeFile(output_file)
+        midi_file.writeFile(output_file)

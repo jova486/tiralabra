@@ -1,3 +1,9 @@
+
+"""
+Created on Fri Jan 14 18:26:35 2022
+
+@author: jovajova
+"""
 import random
 
 
@@ -20,7 +26,7 @@ def getNext(trie, array):
     prob = []
     temp = 0
     for i in arr:
-        temp += i[1]/sum
+        temp += i[1] / sum
         prob.append((i[0], temp))
 
     rand = random.random()
@@ -46,17 +52,16 @@ def doArray(trie, deg, length):
     while length > 0:
         next = getNext(trie, sq)
         if next != []:
-            if len(sq)<deg:
+            if len(sq) < deg:
                 sq.append(next)
             else:
                 out.append(next)
                 sq.append(next)
                 sq.pop(0)
-                length -=1
+                length -= 1
         else:
             sq = []
     return out
-
 
 
 def doArray_strict(trie, deg, length):

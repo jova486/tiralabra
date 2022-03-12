@@ -1,5 +1,10 @@
+"""
+Created on Fri Jan 14 18:26:35 2022
+
+@author: jovajova
+"""
 from trie import Trie
-import midiIO as r
+import midi_io
 import markov_chain as mc
 
 
@@ -7,7 +12,7 @@ def make_harmony_table(arr):
     """Apumetodi joka rakentaa matriisin harmonioista jokaiselle tahtiosalle
 
         Args:
-            arr: Taulukko jossa nuotti ja rytmi arvot
+            arr: Taulukko jossa nuotrie_tenori ja rytmi arvot
 
         Returns:
             list: taulukko taulukko johon harmoniat tallennetaan
@@ -34,7 +39,7 @@ def make_rythm_table(arr, rythms):
 
     for k in range(0, len(arr)):
         for j in range(0, len(arr[k])):
-            rythms[k].append(arr[k][j][0]*2)
+            rythms[k].append(arr[k][j][0] * 2)
     return rythms
 
 
@@ -58,7 +63,7 @@ class Service:
         self.trie = Trie()
 
     def set_time_signature(self, text):
-        """Asettaa tahtilajin.
+        """Asetrie_tenoraa tahtilajin.
         Args:
             text: tahtilaji merkkijonona
         """
@@ -73,7 +78,7 @@ class Service:
             self.time_signature_denominator = 4
 
     def set_markov_depth(self, text):
-        """Asettaa markovin ketjun asteen.
+        """Asetrie_tenoraa markovin ketjun asteen.
         Args:
             text: ketjun aste merkkijonona
         """
@@ -94,24 +99,24 @@ class Service:
         for file in self.midifile_name_melody_array:
             self.add_to_trie(file)
 
-    def add_to_trie(self,filename):
+    def add_to_trie(self, filename):
         """Lisää tiedoston sisällön trieeen
         Args:
-            filename: ketjun lisättävän tiedoston nimi
+            filename: ketjun lisätrie_tenorävän tiedoston nimi
 
         """
 
-        data = r.from_midi_To_list(filename)[0]
+        data = midi_io.from_midi_to_list(filename)[0]
 
         melody = []
         for i in range(0, len(data)):
             melody.append(data[i][1])
 
-        trie =  self.trie
-        trie.insert_array(melody, self.markov_depth+1)
+        trie = self.trie
+        trie.insert_array(melody, self.markov_depth + 1)
 
     def add_file_name(self, filename, text):
-        """asettaa tallennettavan midi tiedoston nimen
+        """asetrie_tenoraa tallennetrie_tenoravan midi tiedoston nimen
         Args:
             filename: miditiedoston nimi
             text: melodia tai rytmi
@@ -126,21 +131,22 @@ class Service:
     def save_midi_file(self, filename):
         """Tallentaa midi tiedoston
         Args:
-            filename: tallennettavan tiedoston nimi
+            filename: tallennetrie_tenoravan tiedoston nimi
         """
         if self.midifile_name_melody == "":
             return
-        self.num_tracks = r.get_file_info(self.midifile_name_melody)
+        self.num_tracks = midi_io.get_file_info(self.midifile_name_melody)
         if self.num_tracks > 1:
             self.do_four_track(self.midifile_name_melody, 0)
         else:
             self.do_one_track_melody(self.midifile_name_melody, 0)
-        if self.num_tracks > 1:
-            r.arr_To_midifile(
-                filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
-        else:
-            r.arr_To_midifile(
-                filename, self.out_file, self.time_signature_numerator, self.time_signature_denominator)
+
+        midi_io.arr_to_midifile(
+            filename,
+            self.out_file,
+            self.time_signature_numerator,
+            self.time_signature_denominator)
+
 
     def do_one_track_melody(self, filename, lenght):
         """Tekee yksiäänisen koosteen tiedoston materiaalista
@@ -149,20 +155,19 @@ class Service:
             lenght: ei käytössä vielä
         """
 
-        data = r.from_midi_To_list(filename)[0]
-
+        data = midi_io.from_midi_to_list(filename)[0]
 
         if self.midifile_name_rythm != "":
-            data = r.from_midi_To_list(self.midifile_name_rythm)[0]
+            data = midi_io.from_midi_to_list(self.midifile_name_rythm)[0]
         rythm = []
         for i in range(0, len(data)):
             rythm.append(data[i][0])
 
         melody_out = mc.doArray(self.trie, self.markov_depth, len(rythm))
 
-        if self.use_original_rythm == False:
+        if not self.use_original_rythm:
             rythm_trie = Trie()
-            rythm_trie.insert_array(rythm, self.markov_depth+1)
+            rythm_trie.insert_array(rythm, self.markov_depth + 1)
             rythm = mc.doArray(rythm_trie, self.markov_depth, len(rythm))
 
         out = []
@@ -176,16 +181,16 @@ class Service:
             filename: tiedosto jonka materiaalista tehdään markovin ketju
             lenght: ei käytössä vielä
         """
-        data = r.from_midi_To_list(filename)
+        data = midi_io.from_midi_to_list(filename)
 
         trythm1 = Trie()
         trythm2 = Trie()
         trythm3 = Trie()
         trythm4 = Trie()
 
-        ta = Trie()
-        tt = Trie()
-        tb = Trie()
+        trie_alto = Trie()
+        trie_tenor = Trie()
+        trie_bass = Trie()
 
         melody = []
         for i in range(0, len(data[0])):
@@ -193,7 +198,6 @@ class Service:
         tm = Trie()
         tm.insert_array(melody, 3)
         m = mc.doArray(tm, 2, len(data[0]))
-
 
         harmonies = make_harmony_table(data)
         rythms = [[], [], [], []]
@@ -206,10 +210,11 @@ class Service:
 
         for i in range(0, len(harmonies[0])):
 
-            ta.insert([harmonies[0][i], harmonies[2][i],
-                      harmonies[3][i], harmonies[1][i]])
-            tt.insert([harmonies[0][i], harmonies[3][i], harmonies[2][i]])
-            tb.insert([harmonies[0][i], harmonies[3][i]])
+            trie_alto.insert([harmonies[0][i], harmonies[2][i],
+                              harmonies[3][i], harmonies[1][i]])
+            trie_tenor.insert(
+                [harmonies[0][i], harmonies[3][i], harmonies[2][i]])
+            trie_bass.insert([harmonies[0][i], harmonies[3][i]])
 
         rt1 = [[], [], [], []]
         rt1[0] = mc.doArray(trythm1, 2, 100)
@@ -219,7 +224,7 @@ class Service:
 
         rythms = [[], [], [], []]
         rythms = make_rythm_table(data, rythms)
-        if self.use_original_rythm == True:
+        if self.use_original_rythm:
             rt1 = [rythms[0], rythms[1], rythms[2], rythms[3]]
 
         voices = [[], [], [], []]
@@ -232,20 +237,20 @@ class Service:
         out = [rt1[0], m, rt1[1], [], rt1[2], [], rt1[3], []]
 
         time = 0
-        b = mc.getNext(tb, [voices[0][time]])
+        next_value = mc.getNext(trie_bass, [voices[0][time]])
 
         for i in range(0, len(rt1[3])):
 
-            b = mc.getNext(tb, [voices[0][time]])
-            if b == []:
+            next_value = mc.getNext(trie_bass, [voices[0][time]])
+            if next_value == []:
                 #print("basso ei löytynyt")
-                b = [voices[0][time]]-24
+                next_value = [voices[0][time]] - 24
             for j in range(0, rt1[3][i]):
-                voices[3].append(b)
+                voices[3].append(next_value)
 
-            out[7].append(b)
+            out[7].append(next_value)
             time += rt1[3][i]
-            if time >= (max_lenght-1):
+            if time >= (max_lenght - 1):
                 break
         max_lenght = min(max_lenght, len(voices[3]))
 
@@ -253,15 +258,15 @@ class Service:
 
         for i in range(0, len(rt1[2])):
 
-            b = mc.getNext(tt, [voices[0][time], voices[3][time]])
-            if b == []:
+            next_value = mc.getNext(trie_tenor, [voices[0][time], voices[3][time]])
+            if next_value == []:
                 #print("tenori ei löytynyt")
-                b = voices[0][time]-12
+                next_value = voices[0][time] - 12
             for j in range(0, rt1[2][i]):
-                voices[2].append(b)
+                voices[2].append(next_value)
             time += rt1[2][i]
-            out[5].append(b)
-            if time >= (max_lenght-1):
+            out[5].append(next_value)
+            if time >= (max_lenght - 1):
                 break
 
         max_lenght = min(max_lenght, len(voices[2]))
@@ -269,20 +274,20 @@ class Service:
         time = 0
 
         for i in range(0, len(rt1[1])):
-            b = mc.getNext(
-                ta, [voices[0][time], voices[2][time], voices[3][time]])
-            if b == []:
-                #print("altto ei löytynyt")
-                b = voices[3][time]+12
+            next_value = mc.getNext(
+                trie_alto, [voices[0][time], voices[2][time], voices[3][time]])
+            if next_value == []:
+                #print("altrie_tenoro ei löytynyt")
+                next_value = voices[3][time] + 12
             time += rt1[1][i]
-            out[3].append(b)
-            if time >= (max_lenght-1):
+            out[3].append(next_value)
+            if time >= (max_lenght - 1):
                 break
 
         out2 = [[], [], [], []]
         for j in range(0, 4):
-            for i in range(0, len(out[j*2+1])):
-                out2[j].append((out[j*2][i], out[j*2+1][i]))
+            for i in range(0, len(out[j * 2 + 1])):
+                out2[j].append((out[j * 2][i], out[j * 2 + 1][i]))
 
         self.out_file = out2
 
